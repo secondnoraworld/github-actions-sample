@@ -1,0 +1,22 @@
+name: "test"
+description: "test"
+author: "noraworld"
+# branding:
+#   icon: search
+#   color: green
+
+inputs:
+  from:
+    description: "TBD"
+    required: true
+  into:
+    description: "TBD"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: check
+      run: |
+        test "$(git rev-list --count ${{ inputs.from }}..${{ inputs.into }})" -eq 0
+      shell: sh
