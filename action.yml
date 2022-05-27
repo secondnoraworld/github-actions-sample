@@ -16,11 +16,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Enable Git operation
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-
     - name: check
       run: |
         test "$(git rev-list --count origin/${{ inputs.from }}..origin/${{ inputs.into }})" -eq 0
