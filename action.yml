@@ -23,5 +23,5 @@ runs:
 
     - name: check
       run: |
-        test "$(git rev-list --count ${{ inputs.from }}..${{ inputs.into }})" -eq 0
+        test "$(git rev-list --count origin/${{ inputs.from }}..origin/${{ inputs.into }})" -eq 0
       shell: bash
