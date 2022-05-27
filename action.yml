@@ -24,3 +24,4 @@ runs:
     - name: check
       run: |
         test "$(git rev-list --count ${{ inputs.from }}..${{ inputs.into }})" -eq 0
+      shell: bash
