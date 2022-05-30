@@ -4,25 +4,26 @@ set -eu
 
 main() {
   from=$1
-  into=$2
+  from_with_origin=origin/$1
+  into_with_origin=origin/$2
 
   validate "$@"
 
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded > /dev/null 2>&1; then
     if ! has_only_merge_commits > /dev/null 2>&1; then
-      echo "ERROR: The $from branch is not fast-forwarded." >&2
+      echo "ERROR: The $from_with_origin branch is not fast-forwarded." >&2
       exit 2
     else
-      echo "INFO: The $into branch has the commits that are not in the $from branch, but it is OK because these commits are merge commits and their parent commits are contained within $from branch all."
+      echo "INFO: The $into_with_origin branch has the commits that are not in the $from_with_origin branch, but it is OK because these commits are merge commits and their parent commits are contained within $from_with_origin branch all."
     fi
   else
-    echo "INFO: Congrats! The $from branch is fast-forwarded!"
+    echo "INFO: Congrats! The $from_with_origin branch is fast-forwarded!"
   fi
 }
 
 fast_forwarded() {
-  if [ "$(git rev-list --count "$from".."$into")" -eq 0 ]; then
+  if [ "$(git rev-list --count "$from_with_origin".."$into_with_origin")" -eq 0 ]; then
     echo true
     return 0
   else
@@ -33,7 +34,7 @@ fast_forwarded() {
 
 # https://stackoverflow.com/questions/3824050/telling-if-a-git-commit-is-a-merge-revert-commit
 has_only_merge_commits() {
-  for commit in $(git rev-list "$from".."$into"); do
+  for commit in $(git rev-list "$from_with_origin".."$into_with_origin"); do
     # return false if there are non-merge commits
     if [ "$(git cat-file -p "$commit" | grep -cE "^parent")" -lt 2 ]; then
       echo false
@@ -59,13 +60,13 @@ validate() {
     exit 1
   fi
 
-  if [ -z "$(git rev-parse --verify --quiet "$from")" ]; then
-    echo "FATAL: The $from branch does not exist." >&2
+  if [ -z "$(git rev-parse --verify --quiet "$from_with_origin")" ]; then
+    echo "FATAL: The $from_with_origin branch does not exist." >&2
     exit 1
   fi
 
-  if [ -z "$(git rev-parse --verify --quiet "$into")" ]; then
-    echo "FATAL: The $into branch does not exist." >&2
+  if [ -z "$(git rev-parse --verify --quiet "$into_with_origin")" ]; then
+    echo "FATAL: The $into_with_origin branch does not exist." >&2
     exit 1
   fi
 }
