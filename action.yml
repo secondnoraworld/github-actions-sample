@@ -22,6 +22,7 @@ runs:
         fetch-depth: 0
 
     - name: check
+      # https://github.com/actions/checkout/issues/296
       run: |
         test "$(git rev-list --count origin/${{ inputs.from }}..origin/${{ inputs.into }})" -eq 0
       shell: sh
