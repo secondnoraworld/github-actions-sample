@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
@@ -9,7 +9,10 @@ main() {
 
   validate "$@"
 
-  git fetch
+  echo "Triggered by commit $(git log -1 --format='%H')" >&2
+  git pull --no-commit
+  git reset --hard "$from_with_origin"
+  echo "Jumped to commit $(git log -1 --format='%H')" >&2
 
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded 1> /dev/null; then
@@ -48,6 +51,7 @@ has_only_merge_commits() {
       echo "base:   $commit" >&2
       echo "parent: $parent_commit" >&2
       git branch --contains "$parent_commit" >&2
+      echo "git branch --contains $parent_commit | grep -cE $from" >&2
       echo >&2
       if [ "$(git branch --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
         echo false
