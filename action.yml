@@ -23,6 +23,9 @@ runs:
 
     - name: check
       # https://github.com/actions/checkout/issues/296
-      run: |
-        test "$(git rev-list --count origin/${{ inputs.from }}..origin/${{ inputs.into }})" -eq 0
+      run: $GITHUB_ACTION_PATH/abcdefg
       shell: sh
+      env:
+        GITHUB_ACTION_PATH: ${{ github.action_path }}
+        FROM: ${{ inputs.from }}
+        INTO: ${{ inputs.into }}
