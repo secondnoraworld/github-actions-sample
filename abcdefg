@@ -43,13 +43,6 @@ has_only_merge_commits() {
 
     # return false if there are commits whose parents are not in head branch
     for parent_commit in $(git cat-file -p "$commit" | grep -E "^parent" | awk '{ print $2 }'); do
-      echo "base:   $commit" >&2
-      echo "parent: $parent_commit" >&2
-      git branch -a --contains "$parent_commit" >&2
-      git checkout develop
-      git log --oneline
-      echo "git branch -a --contains $parent_commit | grep -cE $from" >&2
-      echo >&2
       if [ "$(git branch -a --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
         echo false
         return 2
