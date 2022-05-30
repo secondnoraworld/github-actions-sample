@@ -9,7 +9,10 @@ main() {
 
   validate "$@"
 
-  git fetch
+  echo "Triggered by commit $(git log -1 --format='%H')" >&2
+  git pull --no-commit
+  git reset --hard "$from_with_origin"
+  echo "Jumped to commit $(git log -1 --format='%H')" >&2
 
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded 1> /dev/null; then
