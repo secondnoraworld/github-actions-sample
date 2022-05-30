@@ -9,6 +9,8 @@ main() {
 
   validate "$@"
 
+  git fetch
+
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded 1> /dev/null; then
     if ! has_only_merge_commits 1> /dev/null; then
@@ -49,7 +51,7 @@ has_only_merge_commits() {
       echo >&2
       if [ "$(git branch --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
         echo false
-        # return 2
+        return 2
       fi
     done
   done
