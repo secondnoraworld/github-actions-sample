@@ -24,3 +24,4 @@ runs:
     - name: check
       # https://github.com/actions/checkout/issues/296
       run: ${{ github.action_path }}/abcdefg ${{ inputs.from }} ${{ inputs.into }}
+      shell: bash
