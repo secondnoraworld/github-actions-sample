@@ -9,8 +9,6 @@ main() {
 
   validate "$@"
 
-  git fetch
-
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded 1> /dev/null; then
     if ! has_only_merge_commits 1> /dev/null; then
