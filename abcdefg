@@ -1,3 +1,8 @@
 #!/bin/sh
 
-test "$(git rev-list --count origin/"$FROM"..origin/"$INTO")" -eq 0
+set -eu
+
+if [ "$(git rev-list --count origin/"$FROM"..origin/"$INTO")" -eq 0 ]; then
+  echo "The $FROM branch is not fast-forwarded." >&2
+  exit 1
+fi
