@@ -1,12 +1,12 @@
 #!/bin/sh
 
-set -eux
+set -eu
 
 main() {
-  validate "$@"
-
   from=$1
   into=$2
+
+  validate "$@"
 
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded > /dev/null 2>&1; then
@@ -56,6 +56,16 @@ has_only_merge_commits() {
 validate() {
   if [ "$#" -ne 2 ]; then
     echo "FATAL: Require two arguments." >&2
+    exit 1
+  fi
+
+  if [ -z "$(git rev-parse --verify --quiet "$from")" ]; then
+    echo "FATAL: The $from branch does not exist." >&2
+    exit 1
+  fi
+
+  if [ -z "$(git rev-parse --verify --quiet "$into")" ]; then
+    echo "FATAL: The $into branch does not exist." >&2
     exit 1
   fi
 }
