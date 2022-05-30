@@ -8,9 +8,14 @@ main() {
   from=$1
   into=$2
 
+  # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded > /dev/null 2>&1; then
-    echo "The $from branch is not fast-forwarded." >&2
-    exit 2
+    if ! has_only_merge_commits > /dev/null 2>&1; then
+      echo "ERROR: The $from branch is not fast-forwarded." >&2
+      exit 2
+    else
+      echo "INFO: The $into branch has the commits that are not in the $from branch, but it is OK because these commits are merge commits and their parent commits are contained within $from branch all."
+    fi
   fi
 }
 
@@ -24,9 +29,31 @@ fast_forwarded() {
   fi
 }
 
+# https://stackoverflow.com/questions/3824050/telling-if-a-git-commit-is-a-merge-revert-commit
+has_only_merge_commits() {
+  for commit in $(git rev-list "$from".."$into"); do
+    # return false if there are non-merge commits
+    if [ "$(git cat-file -p "$commit" | grep -cE "^parent")" -lt 2 ]; then
+      echo false
+      return 1
+    fi
+
+    # return false if there are commits whose parents are not in head branch
+    for parent_commit in $(git cat-file -p "$commit" | grep -E "^parent" | awk '{ print $2 }'); do
+      if [ "$(git branch --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
+        echo false
+        return 2
+      fi
+    done
+  done
+
+  echo true
+  return 0
+}
+
 validate() {
   if [ "$#" -ne 2 ]; then
-    echo "Require two arguments" >&2
+    echo "FATAL: Require two arguments." >&2
     exit 1
   fi
 }
