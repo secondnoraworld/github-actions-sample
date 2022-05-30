@@ -10,8 +10,8 @@ main() {
   validate "$@"
 
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
-  if ! fast_forwarded > /dev/null 2>&1; then
-    if ! has_only_merge_commits > /dev/null 2>&1; then
+  if ! fast_forwarded 1> /dev/null; then
+    if ! has_only_merge_commits 1> /dev/null; then
       echo "ERROR: The $from_with_origin branch is not fast-forwarded." >&2
       exit 2
     else
@@ -43,6 +43,8 @@ has_only_merge_commits() {
 
     # return false if there are commits whose parents are not in head branch
     for parent_commit in $(git cat-file -p "$commit" | grep -E "^parent" | awk '{ print $2 }'); do
+      git branch --contains "$parent_commit" >&2
+      echo >&2
       if [ "$(git branch --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
         echo false
         return 2
