@@ -46,6 +46,8 @@ has_only_merge_commits() {
       echo "base:   $commit" >&2
       echo "parent: $parent_commit" >&2
       git branch -a --contains "$parent_commit" >&2
+      git checkout develop
+      git log --oneline
       echo "git branch -a --contains $parent_commit | grep -cE $from" >&2
       echo >&2
       if [ "$(git branch -a --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
