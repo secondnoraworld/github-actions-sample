@@ -1,6 +1,6 @@
-#!/bin/bash
+#!/bin/sh
 
-set -eu
+set -eux
 
 main() {
   validate "$@"
