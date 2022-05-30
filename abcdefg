@@ -2,7 +2,21 @@
 
 set -eu
 
-if [ "$(git rev-list --count origin/"$FROM"..origin/"$INTO")" -ne 0 ]; then
-  echo "The $FROM branch is not fast-forwarded." >&2
-  exit 1
-fi
+main() {
+  if ! fast_forwarded > /dev/null 2>&1; then
+    echo "The $FROM branch is not fast-forwarded." >&2
+    exit 1
+  fi
+}
+
+fast_forwarded() {
+  if [ "$(git rev-list --count origin/"$FROM"..origin/"$INTO")" -eq 0 ]; then
+    echo true
+    return 0
+  else
+    echo false
+    return 1
+  fi
+}
+
+main
