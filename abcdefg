@@ -3,14 +3,19 @@
 set -eu
 
 main() {
+  validate "$@"
+
+  from=$1
+  into=$2
+
   if ! fast_forwarded > /dev/null 2>&1; then
-    echo "The $FROM branch is not fast-forwarded." >&2
-    exit 1
+    echo "The $from branch is not fast-forwarded." >&2
+    exit 2
   fi
 }
 
 fast_forwarded() {
-  if [ "$(git rev-list --count origin/"$FROM"..origin/"$INTO")" -eq 0 ]; then
+  if [ "$(git rev-list --count origin/"$from"..origin/"$into")" -eq 0 ]; then
     echo true
     return 0
   else
@@ -19,4 +24,11 @@ fast_forwarded() {
   fi
 }
 
-main
+validate() {
+  if [ "$#" -ne 2 ]; then
+    echo "Require two arguments" >&2
+    exit 1
+  fi
+}
+
+main "$@"
