@@ -16,6 +16,8 @@ main() {
     else
       echo "INFO: The $into branch has the commits that are not in the $from branch, but it is OK because these commits are merge commits and their parent commits are contained within $from branch all."
     fi
+  else
+    echo "INFO: Congrats! The $from branch is fast-forwarded!"
   fi
 }
 
