@@ -22,7 +22,7 @@ main() {
 }
 
 fast_forwarded() {
-  if [ "$(git rev-list --count origin/"$from"..origin/"$into")" -eq 0 ]; then
+  if [ "$(git rev-list --count "$from".."$into")" -eq 0 ]; then
     echo true
     return 0
   else
