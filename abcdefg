@@ -1,9 +1,10 @@
-#!/bin/bash
+#!/bin/sh
 
 set -eu
 
 main() {
   from=$1
+  into=$2
   from_with_origin=origin/$1
   into_with_origin=origin/$2
 
@@ -12,13 +13,13 @@ main() {
   # "fast_forwarded" should be executed first because "has_only_merge_commits" is low performance
   if ! fast_forwarded 1> /dev/null; then
     if ! has_only_merge_commits 1> /dev/null; then
-      echo "ERROR: The $from_with_origin branch is not fast-forwarded." >&2
+      echo "Error: The $from_with_origin branch is not fast-forwarded." >&2
       exit 2
     else
-      echo "INFO: The $into_with_origin branch has the commits that are not in the $from_with_origin branch, but it is OK because these commits are merge commits and their parent commits are contained within $from_with_origin branch all."
+      echo "Info: The $into_with_origin branch has the commits that are not in the $from_with_origin branch, but it is OK because these commits are merge commits and their parent commits are contained within $from_with_origin branch all."
     fi
   else
-    echo "INFO: Congrats! The $from_with_origin branch is fast-forwarded!"
+    echo "Info: Congrats! The $from_with_origin branch is fast-forwarded!"
   fi
 }
 
@@ -37,6 +38,7 @@ has_only_merge_commits() {
   for commit in $(git rev-list "$from_with_origin".."$into_with_origin"); do
     # return false if there are non-merge commits
     if [ "$(git cat-file -p "$commit" | grep -cE "^parent")" -lt 2 ]; then
+      echo "Error: The $into branch has non-merge commits that the $from branch does not have." >&2
       echo false
       return 1
     fi
@@ -56,17 +58,17 @@ has_only_merge_commits() {
 
 validate() {
   if [ "$#" -ne 2 ]; then
-    echo "FATAL: Require two arguments." >&2
+    echo "Fatal: Require two arguments." >&2
     exit 1
   fi
 
   if [ -z "$(git rev-parse --verify --quiet "$from_with_origin")" ]; then
-    echo "FATAL: The $from_with_origin branch does not exist." >&2
+    echo "Fatal: The $from_with_origin branch does not exist." >&2
     exit 1
   fi
 
   if [ -z "$(git rev-parse --verify --quiet "$into_with_origin")" ]; then
-    echo "FATAL: The $into_with_origin branch does not exist." >&2
+    echo "Fatal: The $into_with_origin branch does not exist." >&2
     exit 1
   fi
 }
