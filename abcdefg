@@ -35,25 +35,31 @@ fast_forwarded() {
 
 # https://stackoverflow.com/questions/3824050/telling-if-a-git-commit-is-a-merge-revert-commit
 has_only_merge_commits() {
+  ok=true
+
   for commit in $(git rev-list "$from_with_origin".."$into_with_origin"); do
     # return false if there are non-merge commits
     if [ "$(git cat-file -p "$commit" | grep -cE "^parent")" -lt 2 ]; then
-      echo "Error: The $into branch has non-merge commits that the $from branch does not have." >&2
-      echo false
-      return 1
+      echo "Error: The $into branch has the non-merge commit \"$commit\" that is not in the $from branch." >&2
+      ok=false
     fi
 
     # return false if there are commits whose parents are not in head branch
     for parent_commit in $(git cat-file -p "$commit" | grep -E "^parent" | awk '{ print $2 }'); do
       if [ "$(git branch -a --contains "$parent_commit" | grep -cE "$from")" -eq 0 ]; then
-        echo false
-        return 2
+        echo "Error: The commit \"$commit\" (in the $into branch) has the parent commit \"$parent_commit\" that is not in the $from branch." >&2
+        ok=false
       fi
     done
   done
 
-  echo true
-  return 0
+  if $ok; then
+    echo true
+    return 0
+  else
+    echo false
+    return 1
+  fi
 }
 
 validate() {
