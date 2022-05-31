@@ -41,8 +41,8 @@ has_only_merge_commits() {
 
   if [ -n "$commits_only_in_base_branch" ] && [ -n "$commits_only_in_head_branch" ]; then
     echo "Error: The $from branch and the $into branch have the commits that the other branch does not have each other." >&2
-    echo "$commits_only_in_base_branch" | xargs echo "       The commits that are not in $from branch:" >&2
-    echo "$commits_only_in_head_branch" | xargs echo "       The commits that are not in $into branch:" >&2
+    echo "$commits_only_in_base_branch" | xargs echo "       The commits that are not in the $from branch:" >&2
+    echo "$commits_only_in_head_branch" | xargs echo "       The commits that are not in the $into branch:" >&2
     ok=false
   fi
 
