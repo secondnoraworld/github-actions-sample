@@ -4,7 +4,7 @@ on: pull_request
 
 jobs:
   job_test:
-    if: github.head_ref != 'master' && github.base_ref != 'develop'
+    if: github.head_ref != 'master' || github.base_ref != 'develop'
     runs-on: ubuntu-latest
     steps:
       - name: "step_test"
