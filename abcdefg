@@ -19,7 +19,7 @@ main() {
       echo "Info: The $into_with_origin branch has the commits that are not in the $from_with_origin branch, but it is OK because these commits are merge commits and their parent commits are contained within $from_with_origin branch all."
     fi
   else
-    echo "Info: Congrats! The $from_with_origin branch is fast-forwarded!"
+    echo "Congrats! The $from_with_origin branch is fast-forwarded!"
   fi
 }
 
