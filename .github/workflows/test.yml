@@ -1,14 +1,14 @@
-name: "workflow_test"
+name: "git-flow observer"
 
 on: pull_request
 
 jobs:
-  job_test:
+  git-flow-observer:
     if: github.head_ref != 'master' || github.base_ref != 'develop'
     runs-on: ubuntu-latest
     steps:
-      - name: "step_test"
-        uses: secondnoraworld/github-actions-sample@develop
+      - name: "Observe"
+        uses: noraworld/git-flow-observer@main
         with:
-          from: "develop"
-          into: "master"
+          head: "develop"
+          base: "master"
