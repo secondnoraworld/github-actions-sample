@@ -1,16 +1,16 @@
-name: "test"
-description: "test"
+name: "git-flow observer"
+description: "git-flow observer allows you to check your project is in correct operation as git-flow"
 author: "noraworld"
 # branding:
 #   icon: search
 #   color: green
 
 inputs:
-  from:
-    description: "TBD"
+  head:
+    description: "The branch name as basis for comparison"
     required: true
-  into:
-    description: "TBD"
+  base:
+    description: "The branch name that is checked whether or not fast-forwarded"
     required: true
 
 runs:
@@ -21,7 +21,7 @@ runs:
       with:
         fetch-depth: 0
 
-    - name: check
+    - name: Observe
       # https://github.com/actions/checkout/issues/296
-      run: ${{ github.action_path }}/abcdefg ${{ inputs.from }} ${{ inputs.into }}
+      run: ${{ github.action_path }}/abcdefg ${{ inputs.head }} ${{ inputs.base }}
       shell: sh

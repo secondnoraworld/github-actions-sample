@@ -10,5 +10,5 @@ jobs:
       - name: "step_test"
         uses: secondnoraworld/github-actions-sample@develop
         with:
-          from: "develop"
-          into: "master"
+          head: "develop"
+          base: "master"
