@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Observe"
-        uses: noraworld/git-flow-observer@main
+        uses: noraworld/git-flow-observer@unknown
         with:
           head: "develop"
           base: "master"
