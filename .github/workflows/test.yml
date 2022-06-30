@@ -1,14 +1,16 @@
-name: "git-flow observer"
+name: "github-pr-release"
 
-on: pull_request
+on:
+  pull_request:
+    branches:
+      - main
+      - 'release/**'
+      - 'releases/**'
 
 jobs:
-  git-flow-observer:
-    if: github.head_ref != 'master' || github.base_ref != 'develop'
+  github-pr-release:
     runs-on: ubuntu-latest
     steps:
-      - name: "Observe"
-        uses: noraworld/git-flow-observer@unknown
-        with:
-          head: "develop"
-          base: "master"
+      - name: "github-pr-release"
+        run: echo ${{ github.event.pull_request.head.ref }}
+        shell: sh
