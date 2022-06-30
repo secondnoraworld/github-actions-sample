@@ -1,11 +1,6 @@
 name: "github-pr-release"
 
-on:
-  pull_request:
-    branches:
-      - main
-      - 'release/**'
-      - 'releases/**'
+on: pull_request
 
 jobs:
   github-pr-release:
