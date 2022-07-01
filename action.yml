@@ -1,0 +1,26 @@
+name: "TBD"
+description: "TBD"
+author: "noraworld"
+#branding:
+#  icon: git-branch
+#  color: blue
+
+inputs:
+  head:
+    description: "TBD"
+    required: true
+  base:
+    description: "TBD"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Enable Git operation
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    - name: test
+      run: ${{ github.action_path }}/main ${{ inputs.head }} ${{ inputs.base }}
+      shell: sh
