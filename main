@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -eu
+
+main() {
+  merge_commits=$(git --no-pager log --oneline --merges "$MAIN".."$DEVELOP" | awk '{ print $1 }')
+  gh api "https://api.github.com/repos/$REPOSITORY/commits/$merge_commits/pulls" --jq .[].number
+}
+
+main "$@"
+
+# gh api "https://api.github.com/repos/secondnoraworld/github-actions-sample/commits/8fd9309c755c18678ff2f8d55ab92a3426c2d2d5/pulls" --jq .[].number
+# 109

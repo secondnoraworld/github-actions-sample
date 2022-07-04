@@ -24,3 +24,7 @@ runs:
     - name: test
       run: ${{ github.action_path }}/main ${{ inputs.main }} ${{ inputs.develop }}
       shell: sh
+      env:
+        REPOSITORY: ${{ github.repository }}
+        MAIN: ${{ inputs.main }}
+        DEVELOP: ${{ inputs.develop }}
