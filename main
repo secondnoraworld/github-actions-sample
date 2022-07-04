@@ -3,8 +3,13 @@
 set -eu
 
 main() {
-  merge_commits=$(git --no-pager log --oneline --merges "$MAIN".."$DEVELOP" | awk '{ print $1 }')
-  gh api "https://api.github.com/repos/$REPOSITORY/commits/$merge_commits/pulls" --jq .[].number
+  merged_prs=$(
+    git --no-pager log --oneline --reverse --merges origin/"$MAIN"..origin/"$DEVELOP" |
+    awk '{ print $1 }' |
+    xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"'
+  )
+  echo "$merged_prs"
+  # gh api "https://api.github.com/repos/$REPOSITORY/commits/$merge_commits/pulls" --jq .[].number
 }
 
 main "$@"

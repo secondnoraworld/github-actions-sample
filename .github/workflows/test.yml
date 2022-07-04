@@ -8,5 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "github-pr-release"
-        run: echo ${{ github.event.pull_request.head.ref }}
-        shell: sh
+        uses: secondnoraworld/github-actions-sample@main
+        with:
+          main: "master"
+          develop: "develop"
