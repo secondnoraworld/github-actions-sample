@@ -32,5 +32,6 @@ runs:
 
     - name: comment
       run: gh pr comment ${{ github.event.number }} --body "${{ steps.test.outputs.pr }}"
+      shell: sh
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
