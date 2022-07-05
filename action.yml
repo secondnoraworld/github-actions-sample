@@ -21,17 +21,17 @@ runs:
       with:
         fetch-depth: 0
 
-    - name: test
-      run: echo "::set-output name=pr::$(${{ github.action_path }}/main ${{ inputs.main }} ${{ inputs.develop }})"
-      shell: sh
-      env:
-        REPOSITORY: ${{ github.repository }}
-        MAIN: ${{ inputs.main }}
-        DEVELOP: ${{ inputs.develop }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: test
+    #   run: echo "::set-output name=pr::$(${{ github.action_path }}/main ${{ inputs.main }} ${{ inputs.develop }})"
+    #   shell: sh
+    #   env:
+    #     REPOSITORY: ${{ github.repository }}
+    #     MAIN: ${{ inputs.main }}
+    #     DEVELOP: ${{ inputs.develop }}
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - name: comment
-      run: gh pr comment ${{ github.event.number }} --body "${{ steps.test.outputs.pr }}"
-      shell: sh
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # - name: comment
+    #   run: gh pr comment ${{ github.event.number }} --body "${{ steps.test.outputs.pr }}"
+    #   shell: sh
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
