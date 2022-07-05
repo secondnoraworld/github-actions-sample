@@ -12,6 +12,18 @@ inputs:
   develop:
     description: "TBD"
     required: true
+  checkbox:
+    description: "TBD"
+    default: true
+    required: false
+  title:
+    description: "TBD"
+    default: false
+    required: false
+  author:
+    description: "TBD"
+    default: true
+    required: false
 
 runs:
   using: "composite"
@@ -23,11 +35,14 @@ runs:
 
     - id: test
       name: test
-      run: ${{ github.action_path }}/main ${{ inputs.main }} ${{ inputs.develop }}
+      run: ${{ github.action_path }}/main
       shell: sh
       env:
         REPOSITORY: ${{ github.repository }}
         MAIN: ${{ inputs.main }}
         DEVELOP: ${{ inputs.develop }}
+        CHECKBOX: ${{ inputs.checkbox }}
+        TITLE: ${{ inputs.title }}
+        AUTHOR: ${{ inputs.author }}
         PR: ${{ github.event.number }}
         GITHUB_TOKEN: ${{ github.token }}
