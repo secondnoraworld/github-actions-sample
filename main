@@ -10,17 +10,11 @@ main() {
     # Extract merge commit hashes
     awk '{ print $1 }' |
 
-    # Retrieve PR numbers, titles, and authors from JSONs
-    #
-    #   Example:
-    #     124 Add ability noraworld
-    #     129 Fix bug noraworld
-    #     130 Update README noraworld
+    # Retrieve a JSON from an API
     #
     #   Memo:
     #     Call as many APIs as PRs
     #     I'm not sure how to put all calls together
-    # xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"'
     xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls"
   )
 
@@ -45,26 +39,6 @@ main() {
   fi
 
   aaaaa=$(paste -d " " <(echo "$pr_numbers") <(echo "$titles") <(echo "$authors") | sed -e "s/^/$checkboxes/g")
-  # echo "$titles"
-
-  # echo "$jq_query"
-  # echo "$pr_list_json" | jq '.[] | "\(.number) \(.title) \(.user.login)"'
-
-  # Add "#" at the beginning of PR numbers and "@" at the beginning of authors
-  #
-  #   Before:
-  #     124 Add ability noraworld
-  #     129 Fix bug noraworld
-  #     130 Update README noraworld
-  #   After:
-  #     #124 Add ability @noraworld
-  #     #129 Fix bug @noraworld
-  #     #130 Update README @noraworld
-  #
-  #   Memo:
-  #     PR numbers with "#" and authors with "@" is automatically turned into links
-  #     So there is no need to make links manually
-  # awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
 
   # echo "$aaaaa"
   gh pr comment "$PR" --body "$aaaaa"
