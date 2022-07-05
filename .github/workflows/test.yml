@@ -13,4 +13,4 @@ jobs:
       - name: "github-pr-release"
         uses: secondnoraworld/github-actions-sample@release/20220704-1
         with:
-          main: master
+          base: master

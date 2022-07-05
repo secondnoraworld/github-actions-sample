@@ -5,7 +5,7 @@ set -eu
 main() {
   pr_list_json=$(
     # Get merge commits
-    git --no-pager log --oneline --reverse --merges origin/"$MAIN"..origin/"$DEVELOP" |
+    git --no-pager log --oneline --reverse --merges origin/"$BASE"..origin/"$HEAD" |
 
     # Extract merge commit hashes
     awk '{ print $1 }' |

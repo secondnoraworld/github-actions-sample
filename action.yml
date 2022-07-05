@@ -6,13 +6,13 @@ author: "noraworld"
 #  color: blue
 
 inputs:
-  main:
-    description: "TBD"
-    default: main
-    required: false
-  develop:
+  head:
     description: "TBD"
     default: develop
+    required: false
+  base:
+    description: "TBD"
+    default: main
     required: false
   checkbox:
     description: "TBD"
@@ -35,14 +35,13 @@ runs:
       with:
         fetch-depth: 0
 
-    - id: test
-      name: test
+    - name: test
       run: ${{ github.action_path }}/main
       shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
-        MAIN: ${{ inputs.main }}
-        DEVELOP: ${{ inputs.develop }}
+        HEAD: ${{ inputs.head }}
+        BASE: ${{ inputs.base }}
         CHECKBOX: ${{ inputs.checkbox }}
         TITLE: ${{ inputs.title }}
         AUTHOR: ${{ inputs.author }}
