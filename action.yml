@@ -38,7 +38,7 @@ runs:
     - id: test
       name: test
       run: ${{ github.action_path }}/main
-      shell: sh
+      shell: bash
       env:
         REPOSITORY: ${{ github.repository }}
         MAIN: ${{ inputs.main }}
