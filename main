@@ -8,7 +8,8 @@ main() {
     awk '{ print $1 }' |
     xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"'
   )
-  echo "$merged_prs"
+  # echo "$merged_prs"
+  gh pr comment "$PR" --body "$merged_prs"
   # gh api "https://api.github.com/repos/$REPOSITORY/commits/$merge_commits/pulls" --jq .[].number
 }
 

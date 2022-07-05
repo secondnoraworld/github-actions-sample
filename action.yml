@@ -29,11 +29,12 @@ runs:
         REPOSITORY: ${{ github.repository }}
         MAIN: ${{ inputs.main }}
         DEVELOP: ${{ inputs.develop }}
+        PR: ${{ github.event.number }}
         GITHUB_TOKEN: ${{ github.token }}
 
-    - name: comment
-      # run: gh pr comment ${{ github.event.number }} --body "${{ steps.test.outputs.pr }}"
-      run: echo ${{ github.event.number }} and "${{ steps.test.outputs.pr }}"
-      shell: sh
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+    # - name: comment
+    #   # run: gh pr comment ${{ github.event.number }} --body "${{ steps.test.outputs.pr }}"
+    #   run: echo ${{ github.event.number }} and "${{ steps.test.outputs.pr }}"
+    #   shell: sh
+    #   env:
+    #     GITHUB_TOKEN: ${{ github.token }}
