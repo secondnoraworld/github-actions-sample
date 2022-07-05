@@ -21,7 +21,8 @@ runs:
       with:
         fetch-depth: 0
 
-    - name: test
+    - id: test
+      name: test
       run: echo "::set-output name=pr::$(${{ github.action_path }}/main ${{ inputs.main }} ${{ inputs.develop }})"
       shell: sh
       env:
