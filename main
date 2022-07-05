@@ -1,9 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 
 set -eu
 
 main() {
-  pr_list=$(
+  pr_list_json=$(
     # Get merge commits
     git --no-pager log --oneline --reverse --merges origin/"$MAIN"..origin/"$DEVELOP" |
 
@@ -24,6 +24,32 @@ main() {
     xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls"
   )
 
+  if $CHECKBOX; then
+    checkboxes="* [ ] "
+  else
+    checkboxes="* "
+  fi
+
+  pr_numbers=$(echo "$pr_list_json" | jq -r .[].number | sed -e 's/^/#/g')
+
+  if $TITLE; then
+    titles=$(echo "$pr_list_json" | jq -r .[].title)
+  else
+    titles=""
+  fi
+
+  if $AUTHOR; then
+    authors=$(echo "$pr_list_json" | jq -r .[].user.login | sed -e 's/^/@/g')
+  else
+    authors=""
+  fi
+
+  aaaaa=$(paste -d " " <(echo "$pr_numbers") <(echo "$titles") <(echo "$authors") | sed -e "s/^/$checkboxes/g")
+  # echo "$titles"
+
+  # echo "$jq_query"
+  # echo "$pr_list_json" | jq '.[] | "\(.number) \(.title) \(.user.login)"'
+
   # Add "#" at the beginning of PR numbers and "@" at the beginning of authors
   #
   #   Before:
@@ -40,8 +66,8 @@ main() {
   #     So there is no need to make links manually
   # awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
 
-  # echo "$pr_list"
-  gh pr comment "$PR" --body "$pr_list"
+  # echo "$pr_list_json"
+  gh pr comment "$PR" --body "$aaaaa"
 }
 
 main "$@"

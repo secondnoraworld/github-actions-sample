@@ -8,10 +8,12 @@ author: "noraworld"
 inputs:
   main:
     description: "TBD"
-    required: true
+    default: main
+    required: false
   develop:
     description: "TBD"
-    required: true
+    default: develop
+    required: false
   checkbox:
     description: "TBD"
     default: true
