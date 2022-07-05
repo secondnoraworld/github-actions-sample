@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "github-pr-release"
-        uses: secondnoraworld/github-actions-sample@develop
+        uses: secondnoraworld/github-actions-sample@release/20220704-1
         with:
           main: "master"
           develop: "develop"
