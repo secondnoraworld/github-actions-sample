@@ -31,7 +31,7 @@ main() {
     #   Memo:
     #     PR numbers with "#" and authors with "@" is automatically turned into links
     #     So there is no need to make links manually
-    awk '{ print "#" $1 " " $2 " @" $3 }'
+    awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
   )
 
   # echo "$pr_list"
