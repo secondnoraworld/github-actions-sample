@@ -20,7 +20,8 @@ main() {
     #   Memo:
     #     Call as many APIs as PRs
     #     I'm not sure how to put all calls together
-    xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"'
+    xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"' |
+    awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
   )
 
   # Add "#" at the beginning of PR numbers and "@" at the beginning of authors
