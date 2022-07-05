@@ -20,8 +20,8 @@ main() {
     #   Memo:
     #     Call as many APIs as PRs
     #     I'm not sure how to put all calls together
-    xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"' |
-    awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
+    # xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" --jq '.[] | "\(.number) \(.title) \(.user.login)"'
+    xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls" | jq '.[] | "\(.number) \(.title) \(.user.login)"'
   )
 
   # Add "#" at the beginning of PR numbers and "@" at the beginning of authors
@@ -38,7 +38,7 @@ main() {
   #   Memo:
   #     PR numbers with "#" and authors with "@" is automatically turned into links
   #     So there is no need to make links manually
-  awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
+  # awk '{ print "* [ ] #" $1 " " $2 " @" $3 }'
 
   # echo "$pr_list"
   gh pr comment "$PR" --body "$pr_list"
