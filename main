@@ -18,30 +18,47 @@ main() {
     xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls"
   )
 
-  if $CHECKBOX; then
-    checkboxes="* [ ] "
+  comment
+}
+
+comment() {
+  if $DEBUG; then
+    message
   else
-    checkboxes="* "
+    gh pr comment "$PR" --body "$(message)"
   fi
+}
 
-  pr_numbers=$(echo "$pr_list_json" | jq -r .[].number | sed -e 's/^/#/g')
+message() {
+  paste -d " " <(pr_numbers) <(titles) <(authors) | sed -e "s/^/$(checkboxes)/g"
+}
 
+pr_numbers() {
+  echo "$pr_list_json" | jq -r .[].number | sed -e 's/^/#/g'
+}
+
+titles() {
   if $TITLE; then
-    titles=$(echo "$pr_list_json" | jq -r .[].title)
+    echo "$pr_list_json" | jq -r .[].title
   else
-    titles=""
+    echo ""
   fi
+}
 
+authors() {
   if $AUTHOR; then
-    authors=$(echo "$pr_list_json" | jq -r .[].user.login | sed -e 's/^/@/g')
+    echo "$pr_list_json" | jq -r .[].user.login | sed -e 's/^/@/g'
   else
-    authors=""
+    echo ""
   fi
+}
 
-  aaaaa=$(paste -d " " <(echo "$pr_numbers") <(echo "$titles") <(echo "$authors") | sed -e "s/^/$checkboxes/g")
-
-  # echo "$aaaaa"
-  gh pr comment "$PR" --body "$aaaaa"
+checkboxes() {
+  if $CHECKBOX; then
+    echo "* [ ] "
+  else
+    echo "* "
+  fi
 }
 
 main "$@"

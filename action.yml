@@ -47,3 +47,4 @@ runs:
         AUTHOR: ${{ inputs.author }}
         PR: ${{ github.event.number }}
         GITHUB_TOKEN: ${{ github.token }}
+        DEBUG: false
