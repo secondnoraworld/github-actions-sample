@@ -26,6 +26,14 @@ inputs:
     description: "TBD"
     default: true
     required: false
+  slack_token:
+    description: "TBD"
+    default: ""
+    required: false
+  slack_channel:
+    description: "TBD"
+    default: ""
+    required: false
 
 runs:
   using: "composite"
@@ -47,4 +55,6 @@ runs:
         AUTHOR: ${{ inputs.author }}
         PR: ${{ github.event.number }}
         GITHUB_TOKEN: ${{ github.token }}
+        SLACK_TOKEN: ${{ inputs.slack_token }}
+        SLACK_CHANNEL: ${{ inputs.slack_channel }}
         DEBUG: false

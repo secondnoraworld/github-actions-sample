@@ -19,26 +19,50 @@ main() {
   )
 
   comment
+  post_to_slack
 }
 
 comment() {
   if $DEBUG; then
-    message
+    message github
   else
-    gh pr comment "$PR" --body "$(message)"
+    gh pr comment "$PR" --body "$(message github)"
+  fi
+}
+
+post_to_slack() {
+  if [ "$SLACK_CHANNEL" != "" ] && [ "$SLACK_TOKEN" != "" ]; then
+    curl \
+      -d "text=$(message slack)" \
+      -d "channel=$SLACK_CHANNEL" \
+      -H "Authorization: Bearer $SLACK_TOKEN" \
+      -X POST https://slack.com/api/chat.postMessage
   fi
 }
 
 message() {
-  paste -d " " <(pr_numbers) <(titles) <(authors) | sed -e "s/^/$(checkboxes)/g"
+  type=$1
+
+  paste -d " " <(pr_numbers "$type") <(titles "$type") <(authors "$type") | sed -e "s/^/$(lists "$type")/g"
 }
 
 pr_numbers() {
-  echo "$pr_list_json" | jq -r .[].number | sed -e 's/^/#/g'
+  type=$1
+
+  case $type in
+    github)
+      echo "$pr_list_json" | jq -r .[].number | sed -e 's/^/#/g'
+      ;;
+    slack)
+      echo "$pr_list_json" | jq -r .[].number | xargs -I {} echo "<https://github.com/$REPOSITORY/pull/{}|#{}>"
+      ;;
+  esac
 }
 
 titles() {
-  if $TITLE; then
+  type=$1
+
+  if $TITLE || [ "$type" = "slack" ]; then
     echo "$pr_list_json" | jq -r .[].title
   else
     echo ""
@@ -46,15 +70,29 @@ titles() {
 }
 
 authors() {
-  if $AUTHOR; then
-    echo "$pr_list_json" | jq -r .[].user.login | sed -e 's/^/@/g'
-  else
+  if ! $AUTHOR; then
     echo ""
+    return
   fi
+
+  type=$1
+
+  case $type in
+    github)
+     echo "$pr_list_json" | jq -r .[].user.login | sed -e 's/^/@/g'
+      ;;
+    slack)
+     echo "$pr_list_json" | jq -r .[].user.login | sed -e 's/^/by `@/g' | sed -e 's/$/`/g'
+      ;;
+  esac
 }
 
-checkboxes() {
-  if $CHECKBOX; then
+lists() {
+  type=$1
+
+  if [ "$type" = "slack" ]; then
+    echo "• "
+  elif $CHECKBOX; then
     echo "* [ ] "
   else
     echo "* "
