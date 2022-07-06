@@ -45,11 +45,19 @@ $(message slack)
 fi
 
   if [ "$SLACK_CHANNEL" != "" ] && [ "$SLACK_TOKEN" != "" ]; then
-    curl \
-      -d "text=$slack_message " \
-      -d "channel=$SLACK_CHANNEL" \
-      -H "Authorization: Bearer $SLACK_TOKEN" \
-      -X POST https://slack.com/api/chat.postMessage
+    response=$(
+      curl \
+        -d "text=$slack_message " \
+        -d "channel=$SLACK_CHANNEL" \
+        -H "Authorization: Bearer $SLACK_TOKEN" \
+        -X POST https://slack.com/api/chat.postMessage
+    )
+  fi
+
+  ok=$(echo "$response" | jq -r .ok)
+
+  if ! $ok; then
+    echo "Error: Failed to post a message to Slack." >&2
   fi
 }
 
