@@ -60,6 +60,7 @@ fi
 
   if ! $ok; then
     echo "Error: Failed to post a message to Slack." >&2
+    echo "       $response" >&2
     exit 1
   fi
 }
