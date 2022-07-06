@@ -89,7 +89,6 @@ fi
 message() {
   type=$1
 
-  # paste -d " " <(pr_numbers "$type") <(titles "$type") <(authors "$type") | sed -e "s/^/$(lists "$type")/g"
   paste -d " " <(pr_numbers "$type") <(titles "$type") <(authors "$type") | sed -e "s/^/$(lists "$type")/g" | uniq
 }
 
