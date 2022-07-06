@@ -14,5 +14,5 @@ jobs:
         uses: secondnoraworld/github-actions-sample@release/20220704-1
         with:
           base: master
-          # slack_token: ${{ secrets.SLACK_TOKEN }}
-          # slack_channel: ${{ secrets.SLACK_CHANNEL }}
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          slack_channel: ${{ secrets.SLACK_CHANNEL }}
