@@ -5,7 +5,8 @@ set -eu
 main() {
   pr_list_json=$(
     # Get merge commits
-    git --no-pager log --oneline --reverse --merges origin/"$BASE"..origin/"$HEAD" |
+    # git --no-pager log --oneline --reverse --merges origin/"$BASE"..origin/"$HEAD" |
+    git --no-pager log --oneline --reverse origin/"$BASE"..origin/"$HEAD" |
 
     # Extract merge commit hashes
     awk '{ print $1 }' |
@@ -17,6 +18,26 @@ main() {
     #     I'm not sure how to put all calls together
     xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/commits/{}/pulls"
   )
+
+  # WIP: Extract commits not associated with PRs (for squash commits)
+  # commits_associated_with_prs=$(
+  #   echo "$pr_list_json" |
+  #   jq -r .[].number |
+  #   xargs -I {} gh api "https://api.github.com/repos/$REPOSITORY/pulls/{}/commits" --jq .[].sha
+  # )
+
+  # no_merge_commits=$(
+  #   git --no-pager log --oneline --reverse --no-merges --no-abbrev-commit origin/"$BASE"..origin/"$HEAD" |
+  #   awk '{ print $1 }'
+  # )
+
+  # commits_not_associated_with_prs=$(
+  #   echo "$no_merge_commits" |
+  #   grep -v "$commits_associated_with_prs"
+  # )
+
+  # git --no-pager log --format="%H %s %an" --reverse origin/"$HEAD" | grep "$commits_not_associated_with_prs" | sed -e 's/^[0-9a-f]* //g'
+  # END WIP
 
   comment
 
@@ -68,7 +89,8 @@ fi
 message() {
   type=$1
 
-  paste -d " " <(pr_numbers "$type") <(titles "$type") <(authors "$type") | sed -e "s/^/$(lists "$type")/g"
+  # paste -d " " <(pr_numbers "$type") <(titles "$type") <(authors "$type") | sed -e "s/^/$(lists "$type")/g"
+  paste -d " " <(pr_numbers "$type") <(titles "$type") <(authors "$type") | sed -e "s/^/$(lists "$type")/g" | uniq
 }
 
 pr_numbers() {
