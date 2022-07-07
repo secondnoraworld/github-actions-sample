@@ -16,4 +16,4 @@ jobs:
           base: master
           slack_token: ${{ secrets.SLACK_TOKEN }}
           slack_channel: ${{ secrets.SLACK_CHANNEL }}
-          mode: "all"
+          mode: "optimized"
