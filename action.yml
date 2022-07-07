@@ -34,6 +34,10 @@ inputs:
     description: "TBD"
     default: ""
     required: false
+  mode:
+    description: "merge, squash, or rebase"
+    default: "merge"
+    required: true
 
 runs:
   using: "composite"
@@ -57,4 +61,5 @@ runs:
         GITHUB_TOKEN: ${{ github.token }}
         SLACK_TOKEN: ${{ inputs.slack_token }}
         SLACK_CHANNEL: ${{ inputs.slack_channel }}
+        MODE: ${{ inputs.mode }}
         DEBUG: false
