@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: "Menu"
-        uses: secondnoraworld/github-actions-sample@release/20220704-1
+        uses: noraworld/release-menu@main
         with:
           base: master
           slack_token: ${{ secrets.SLACK_TOKEN }}
