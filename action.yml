@@ -35,8 +35,8 @@ inputs:
     default: ""
     required: false
   mode:
-    description: "merge, squash, or rebase"
-    default: "merge"
+    description: "merged, all, or optimized"
+    default: "merged"
     required: true
 
 runs:

@@ -12,7 +12,7 @@ main() {
 # It should be performed only once because it calls GitHub API many times
 pr_list_json() {
   case $MODE in
-    merge)
+    merged)
       result=$(
         # Get merge commits
         git --no-pager log --oneline --reverse --merges origin/"$BASE"..origin/"$HEAD" |
@@ -29,7 +29,7 @@ pr_list_json() {
       )
 
       ;;
-    squash)
+    all)
       result=$(
         git --no-pager log --oneline --reverse origin/"$BASE"..origin/"$HEAD" |
         awk '{ print $1 }' |
@@ -37,7 +37,7 @@ pr_list_json() {
       )
 
       ;;
-    rebase)
+    optimized)
       merged_prs=$(
         git --no-pager log --oneline --reverse --merges origin/"$BASE"..origin/"$HEAD" |
         awk '{ print $1 }' |
