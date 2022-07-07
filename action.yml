@@ -1,5 +1,5 @@
-name: "TBD"
-description: "TBD"
+name: "Release Menu"
+description: "Let you know what is contained in the release PR by leaving a comment"
 author: "noraworld"
 #branding:
 #  icon: git-branch
@@ -7,35 +7,35 @@ author: "noraworld"
 
 inputs:
   head:
-    description: "TBD"
+    description: "A development branch name"
     default: develop
-    required: false
+    required: true
   base:
-    description: "TBD"
+    description: "A production branch name"
     default: main
-    required: false
+    required: true
   checkbox:
-    description: "TBD"
+    description: "Whether a comment includes checkboxes"
     default: true
-    required: false
+    required: true
   title:
-    description: "TBD"
+    description: "Whether a comment includes titles"
     default: false
-    required: false
+    required: true
   author:
-    description: "TBD"
+    description: "Whether a comment includes author names"
     default: true
-    required: false
+    required: true
   slack_token:
-    description: "TBD"
+    description: "A Slack bot token"
     default: ""
     required: false
   slack_channel:
-    description: "TBD"
+    description: "A Slack channel ID where you want to post a message"
     default: ""
     required: false
   mode:
-    description: "merged, all, or optimized"
+    description: "One of merged, all, or optimized"
     default: "merged"
     required: true
 
@@ -47,19 +47,21 @@ runs:
       with:
         fetch-depth: 0
 
-    - name: test
+    - name: Retrieve PRs and leave a comment
       run: ${{ github.action_path }}/main
       shell: bash
       env:
-        REPOSITORY: ${{ github.repository }}
-        HEAD: ${{ inputs.head }}
-        BASE: ${{ inputs.base }}
-        CHECKBOX: ${{ inputs.checkbox }}
-        TITLE: ${{ inputs.title }}
-        AUTHOR: ${{ inputs.author }}
-        PR: ${{ github.event.number }}
+        REPOSITORY:   ${{ github.repository }}
+        PR:           ${{ github.event.number }}
         GITHUB_TOKEN: ${{ github.token }}
-        SLACK_TOKEN: ${{ inputs.slack_token }}
+
+        HEAD:          ${{ inputs.head }}
+        BASE:          ${{ inputs.base }}
+        CHECKBOX:      ${{ inputs.checkbox }}
+        TITLE:         ${{ inputs.title }}
+        AUTHOR:        ${{ inputs.author }}
+        SLACK_TOKEN:   ${{ inputs.slack_token }}
         SLACK_CHANNEL: ${{ inputs.slack_channel }}
-        MODE: ${{ inputs.mode }}
+        MODE:          ${{ inputs.mode }}
+
         DEBUG: false

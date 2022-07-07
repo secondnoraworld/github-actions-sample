@@ -172,7 +172,6 @@ lists() {
   type=$1
 
   # Slack API does not support bulleted lists
-  #   https://zapier.com/help/doc/tips-formatting-your-slack-messages
   if [ "$type" = "slack" ]; then
     echo "• "
   elif $CHECKBOX; then

@@ -1,4 +1,4 @@
-name: "github-pr-release"
+name: "Release Menu"
 
 on: pull_request
 # on:
@@ -6,11 +6,11 @@ on: pull_request
 #     types: [opened]
 
 jobs:
-  github-pr-release:
+  release-menu:
     if: startsWith(github.event.pull_request.head.ref, 'release')
     runs-on: ubuntu-latest
     steps:
-      - name: "github-pr-release"
+      - name: "Menu"
         uses: secondnoraworld/github-actions-sample@release/20220704-1
         with:
           base: master
