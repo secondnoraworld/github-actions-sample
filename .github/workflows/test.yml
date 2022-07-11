@@ -1,17 +1,19 @@
-name: "github-pr-release"
+name: "Release Menu"
 
-on:
-  pull_request:
-    branches:
-      - master
-      - 'release/**'
-      - 'releases/**'
+on: pull_request
+# on:
+#   pull_request:
+#     types: [opened]
 
 jobs:
-  github-pr-release:
-    if: startsWith(github.event.pull_request.head.ref, "release")
+  release-menu:
+    if: startsWith(github.event.pull_request.head.ref, 'release')
     runs-on: ubuntu-latest
     steps:
-      - name: "github-pr-release"
-        run: echo ${{ github.event.pull_request.head.ref }}
-        shell: sh
+      - name: "Menu"
+        uses: noraworld/release-menu@main
+        with:
+          base: master
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          slack_channel: ${{ secrets.SLACK_CHANNEL }}
+          mode: optimized
